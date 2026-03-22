@@ -15,6 +15,15 @@ export default {
       backdropBlur: {
         md: '12px',
       },
+      animation: {
+        'grid-move': 'grid-move 20s linear infinite',
+      },
+      keyframes: {
+        'grid-move': {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(50px)' }, // Adjust for speed
+        }
+      },      
       fontFamily: {
         // Add "Tourney" to your font families
         montserrat: ['"Montserrat"', 'sans-serif'],
