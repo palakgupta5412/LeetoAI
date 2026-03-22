@@ -14,7 +14,12 @@ export default {
       },
       backdropBlur: {
         md: '12px',
-      }
+      },
+      fontFamily: {
+        // Add "Tourney" to your font families
+        montserrat: ['"Montserrat"', 'sans-serif'],
+        tourney: ['"Tourney"', 'cursive'],
+      },
     },
   },
   plugins: [],
