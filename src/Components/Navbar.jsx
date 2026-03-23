@@ -5,7 +5,7 @@ const Navbar = () => {
     const [isActive, setIsActive] = React.useState(false);
 
   return (
-    <div className='bg-white/10 mx-auto items-center backdrop-blur-lg mt-3 relative z-50 w-full h-14 flex justify-between px-10 py-3 rounded-full'>
+    <div className='bg-white/10  mx-auto items-center backdrop-blur-lg mt-3 fixed z-50 w-full h-14 flex justify-between px-10 py-3 rounded-full'>
         <div className='flex justify-center items-end text-[#ee8c31]'>
             <HiLightBulb size={44}/>
             <h1 className='tracking-widest text-3xl font-tourney text-[#ee8c31] ml-2'>LeetoAI</h1>

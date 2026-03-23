@@ -37,3 +37,19 @@ body::-webkit-scrollbar {
 html, body {
   scrollbar-width: none; 
 }
+
+::selection {
+  background: #e2e8f0;
+  color: #0a0a0f;
+}
+
+.card-scroll{
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
