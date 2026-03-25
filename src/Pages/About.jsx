@@ -8,7 +8,7 @@ const About = () => {
   const card2Ref = useRef(null);
 
   return (
-    <div className='relative bottom-4 px-4 w-full h-[400px] flex justify-center items-end gap-3'>
+    <div id="about" className='relative bottom-4 px-4 w-full h-[400px] flex justify-center items-end gap-3'>
         
         {/* CARD 1: Onboarding Nexus + Draggable Cube */}
         <div ref={card1Ref} className='p-6 w-1/5 h-[300px] bg-white/5 backdrop-blur-md flex flex-col justify-between border border-white/10 rounded-3xl shadow-2xl overflow-hidden group'>

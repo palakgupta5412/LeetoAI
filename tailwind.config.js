@@ -22,6 +22,9 @@ export default {
         'grid-move': {
           '0%': { transform: 'translateY(0)' },
           '100%': { transform: 'translateY(50px)' }, // Adjust for speed
+        },
+        shine: {
+          '100%': { transform: 'translateX(100%)' },
         }
       },      
       fontFamily: {

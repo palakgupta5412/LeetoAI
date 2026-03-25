@@ -4,6 +4,8 @@ import Navbar from '../Components/Navbar';
 import Button from '../Components/Button';
 import { MdSubdirectoryArrowRight, MdOutlineArrowOutward } from "react-icons/md";
 import About from './About';
+import Flow from '../Components/Flow';
+import FooterCTA from '../Components/FooterCTA';
 
 const Homepage = () => {
   return (
@@ -60,6 +62,13 @@ const Homepage = () => {
         
 
         <About />
+
+        <div className='w-full mt-16 opacity-35 h-1/2 bg-cover bg-center'>
+          <img src='/img.png'/>
+        </div>
+
+        <Flow />
+        <FooterCTA />   
     </div>
   )
 }
