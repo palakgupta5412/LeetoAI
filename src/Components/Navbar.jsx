@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { HiLightBulb } from "react-icons/hi";
+import Button from './Button';
 const Navbar = () => {
     const [isActive, setIsActive] = React.useState(false);
 
@@ -18,6 +19,7 @@ const Navbar = () => {
             <NavLink to='/services' className={({isActive}) => isActive ? 'text-[#ee8c31] ' : 'text-[#e2e8f0] '} >Services</NavLink>
             <NavLink to='/profile' className={({isActive}) => isActive ? 'text-[#ee8c31] ' : 'text-[#e2e8f0] '} >Profile</NavLink>
         </div>
+
     </div>
   )
 }

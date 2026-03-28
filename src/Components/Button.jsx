@@ -1,12 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { nav } from 'framer-motion/client';
+import { useNavigate } from 'react-router-dom';
 
 const Button = ({ text, onclick, className, type, Icon }) => {
+  const navigate = useNavigate();
+
   return (
     <motion.button 
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      onClick={onclick}
+      onClick={()=>navigate(onclick)}
       type={type}
       className={`relative px-8 py-4 bg-transparent text-white font-montserrat uppercase tracking-widest text-sm transition-colors group overflow-hidden ${className}`}
     >

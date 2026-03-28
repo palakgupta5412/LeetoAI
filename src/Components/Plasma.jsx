@@ -23,7 +23,6 @@ precision highp float;
 uniform vec2 iResolution;
 uniform float iTime;
 uniform vec3 uCustomColor;
-uniform float uUseCustomColor;
 uniform float uSpeed;
 uniform float uDirection;
 uniform float uScale;
@@ -42,7 +41,7 @@ void mainImage(out vec4 o, vec2 C) {
   float i, d, z, T = iTime * uSpeed * uDirection;
   vec3 O, p, S;
 
-  for (vec2 r = iResolution.xy, Q; ++i < 60.; O += o.w/d*o.xyz) {
+  for (vec2 r = iResolution.xy, Q; ++i < 30.; O += o.w/d*o.xyz) {
     p = z*normalize(vec3(C-.5*r,r.y)); 
     p.z -= 4.; 
     S = p;
@@ -71,9 +70,9 @@ void main() {
   mainImage(o, gl_FragCoord.xy);
   vec3 rgb = sanitize(o.rgb);
   
+  // Calculate grayscale intensity and tint it purely with your Custom Orange Color!
   float intensity = (rgb.r + rgb.g + rgb.b) / 3.0;
-  vec3 customColor = intensity * uCustomColor;
-  vec3 finalColor = mix(rgb, customColor, step(0.5, uUseCustomColor));
+  vec3 finalColor = intensity * uCustomColor; 
   
   float alpha = length(rgb) * uOpacity;
   fragColor = vec4(finalColor, alpha);
@@ -95,15 +94,22 @@ export const Plasma = ({
 
     const useCustomColor = color ? 1.0 : 0.0;
     const customColorRgb = color ? hexToRgb(color) : [1, 1, 1];
-
     const directionMultiplier = direction === 'reverse' ? -1.0 : 1.0;
 
-    const renderer = new Renderer({
-      webgl: 2,
-      alpha: true,
-      antialias: false,
-      dpr: Math.min(window.devicePixelRatio || 1, 2)
-    });
+    // 1. SAFE INITIALIZATION
+    let renderer;
+    try {
+      renderer = new Renderer({
+        webgl: 2,
+        alpha: true,
+        antialias: false,
+        dpr: Math.min(window.devicePixelRatio || 1, 2)
+      });
+    } catch (error) {
+      console.error("WebGL 2 context creation failed. Browser memory might be full or unsupported.", error);
+      return; // Exit safely without crashing the React app
+    }
+
     const gl = renderer.gl;
     const canvas = gl.canvas;
     canvas.style.display = 'block';
@@ -118,14 +124,13 @@ export const Plasma = ({
       fragment: fragment,
       uniforms: {
         iTime: { value: 0 },
-        iResolution: { value: new Float32Array([1, 1]) },
-        uCustomColor: { value: new Float32Array(customColorRgb) },
-        uUseCustomColor: { value: useCustomColor },
+        iResolution: { value: [1, 1] },
+        uCustomColor: { value: customColorRgb }, // direct array [r,g,b]
         uSpeed: { value: speed * 0.4 },
         uDirection: { value: directionMultiplier },
         uScale: { value: scale },
         uOpacity: { value: opacity },
-        uMouse: { value: new Float32Array([0, 0]) },
+        uMouse: { value: [0, 0] },
         uMouseInteractive: { value: mouseInteractive ? 1.0 : 0.0 }
       }
     });
@@ -181,21 +186,32 @@ export const Plasma = ({
     };
     raf = requestAnimationFrame(loop);
 
+    // 2. PROPER CLEANUP
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
       if (mouseInteractive && containerRef.current) {
         containerRef.current.removeEventListener('mousemove', handleMouseMove);
       }
+      
+      // Forcefully clear the WebGL context from GPU memory
+      if (gl) {
+        const extension = gl.getExtension('WEBGL_lose_context');
+        if (extension) {
+          extension.loseContext();
+        }
+      }
+
       try {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        containerRef.current?.removeChild(canvas);
-      } catch {
-        console.warn('Canvas already removed from container');
+        if (containerRef.current && canvas.parentNode === containerRef.current) {
+          containerRef.current.removeChild(canvas);
+        }
+      } catch (err) {
+        console.warn('Canvas removal warning:', err);
       }
     };
   }, [color, speed, direction, scale, opacity, mouseInteractive]);
-
+  
   return <div ref={containerRef} className="w-full h-full overflow-hidden relative" />;
 };
 
